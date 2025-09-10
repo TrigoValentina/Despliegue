@@ -15,8 +15,10 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Iniciar la aplicación en el puerto 3000
-  await app.listen(3000);
+  // Usar puerto asignado por Render o 3000 para local
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  console.log(`Server running on port ${port}`);
 }
 
 bootstrap();
