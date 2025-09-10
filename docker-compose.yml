@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_sedes
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: sedespassword
+      MYSQL_DATABASE: sedes_referencia
+    ports:
+      - "3307:3306"  # Exponer el puerto 3307 en tu host
+    volumes:
+      - ./database/sedes_referencia.sql:/docker-entrypoint-initdb.d/sedes_referencia.sql  # Inicializar la DB con el script
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend-nest-dev
+    container_name: backend_sedes
+    restart: always
+    env_file:
+      - ./backend-nest-dev/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    entrypoint: ["./wait-for-it.sh", "mysql_sedes:3306", "--", "npm", "run", "start:dev"]  # Esperar a MySQL
+    networks:
+      - app-network
+
+  frontend:
+    build: ./Frontend-React-Dev
+    container_name: frontend_sedes
+    restart: always
+    env_file:
+      - ./Frontend-React-Dev/.env
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    command: ["npm", "run", "dev", "--", "--host"]
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

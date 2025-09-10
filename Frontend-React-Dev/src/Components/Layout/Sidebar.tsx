@@ -1,0 +1,207 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from './../../Context/AuthContext';
+
+import hospitalIcon from '../../assets/Images/hospital.png';
+import especialidadesIcon from '../../assets/Images/especialista.png';
+import serviciosIcon from '../../assets/Images/servicio.png';
+import miHospitalIcon from '../../assets/Images/MyHospital.png';
+import redIcon from '../../assets/Images/red.png';
+import hospitalInfoIcon from '../../assets/Images/hospitalinfo.png'; 
+
+interface SidebarProps {
+  isOpen: boolean;
+}
+const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+  const { hasPermission } = useAuth(); 
+  return (
+    <div
+      className={`fixed inset-y-0 left-0 transform ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      } transition-transform duration-200 ease-in-out bg-gradient-to-b from-blue-900 to-blue-800 shadow-lg w-64`}
+    >
+      <div className="flex items-center justify-center h-16 bg-blue-900 text-white shadow-md">
+        <Link to="/inicio" className="text-lg font-extrabold tracking-wider hover:text-blue-300 transition-colors duration-300">
+          SEDES Referencias
+        </Link>
+      </div>
+      <nav className="mt-5">
+        <ul className="space-y-4">
+          {/* Opción para Hospitales */}
+          {hasPermission(['Admin Sedes'])&&(
+          <li className="group">
+            <Link
+              to="/establecimientos"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={hospitalIcon} alt="Hospitales" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Hospitales</span>
+              </div>
+            </Link>
+          </li>
+          )}
+          {/* Opción para Especialidades */}
+          {hasPermission(['Admin Sedes','Admin Hospital'])&&(
+          <li className="group">
+            <Link
+              to="/especialidades"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={especialidadesIcon} alt="Especialidades" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Especialidades</span>
+              </div>
+            </Link>
+          </li>
+          )}
+          {/* Opción para Servicios */}
+          {hasPermission(['Admin Sedes','Admin Hospital'])&&(
+          <li className="group">
+            <Link
+              to="/servicios"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={serviciosIcon} alt="Servicios" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Servicios</span>
+              </div>
+            </Link>
+          </li>
+          )}
+          {/* Nueva opción para Red Coordinación */}
+          {hasPermission(['Admin Sedes'])&&(
+          <li className="group">
+            <Link
+              to="/red-coordinacion"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={redIcon} alt="Red Coordinación" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Red Coordinación</span>
+              </div>
+            </Link>
+          </li>
+          )}
+           {hasPermission(['Admin Sedes','Admin Hospital','Doctor'])&&(
+          <li className="group">
+            <Link
+              to="/hospitales-info"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={hospitalInfoIcon} alt="Hospitales Info" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Hospitales Info</span>
+              </div>
+            </Link>
+          </li>
+           )}
+          {/* Opción para Mi Hospital */}
+          {hasPermission(['Admin Hospital', 'Admin Hospital','Doctor'])&&(
+          <li className="group">
+            <Link
+              to="/miHospital"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={miHospitalIcon} alt="Mi Hospital" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Mi Hospital</span>
+              </div>
+            </Link>
+          </li>
+          )}
+
+          {/* Opción para Persona salud */}
+          {hasPermission(['Admin Hospital', 'Admin Sedes'])&&(
+          <li className="group">
+            <Link
+              to="/personal-salud"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={miHospitalIcon} alt="Mi Hospital" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Personal Salud</span>
+              </div>
+            </Link>
+          </li>
+          )}
+
+          {/* Opción para Cama */}
+          {hasPermission(['Doctor', 'Enfermera', 'Admin Hospital',])&&(
+            <li className="group">
+            <Link
+              to="/cama"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={miHospitalIcon} alt="Mi Hospital" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Cama</span>
+              </div>
+            </Link>
+          </li>
+          )}
+
+          {/* Opción para Cama */}
+          {hasPermission(['Admin Hospital', 'Doctor','Admin Sedes'])&&(
+          <li className="group">
+            <Link
+              to="/cronograma-turnos"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={miHospitalIcon} alt="Mi Hospital" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Rol de turnos</span>
+              </div>
+            </Link>
+          </li>
+          )}
+          {/* Opción para Cama */}
+          {hasPermission(['Admin Hospital', 'Doctor','Admin Sedes'])&&(
+          <li className="group">
+            <Link
+              to="/consulta-externa"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={miHospitalIcon} alt="Mi Hospital" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Consulta Externa</span>
+              </div>
+            </Link>
+          </li>
+          )}
+          {/* Opción de reporte */}
+          {hasPermission(['Admin Sedes'])&&(
+          <li className="group">
+            <Link
+              to="/reporte-especialidades"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={miHospitalIcon} alt="Mi Hospital" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Reporte</span>
+              </div>
+            </Link>
+          </li> 
+          )}
+
+          {/* Opción de reporte */}
+          {hasPermission(['Admin Hospital', 'Doctor','Admin Sedes'])&&(
+          <li className="group">
+            <Link
+              to="/referencia"
+              className="block px-4 py-2 text-gray-200 group-hover:bg-blue-700 group-hover:text-white rounded-md transform transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+            >
+              <div className="flex items-center space-x-2">
+                <img src={miHospitalIcon} alt="Mi Hospital" className="w-6 h-6 group-hover:opacity-80 transition-opacity duration-300" />
+                <span className="group-hover:font-bold">Referencias</span>
+              </div>
+            </Link>
+          </li> 
+          )}        
+        </ul>
+      </nav>
+    </div>
+  );
+};
+
+export default Sidebar;
